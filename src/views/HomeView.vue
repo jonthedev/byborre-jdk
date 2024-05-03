@@ -3,10 +3,7 @@ import { ref } from 'vue'
 import { useFirestore } from 'vuefire'
 import { collection, query, getDocs } from 'firebase/firestore'
 
-const users = ref([
-  { id: 1, fullName: 'John Doe', email: 'john@example.com' },
-  { id: 2, fullName: 'Jane Smith', email: 'jane@example.com' }
-])
+const users = ref([])
 
 const db = useFirestore()
 const q = query(collection(db, 'users'))
@@ -15,7 +12,10 @@ const querySnapshot = await getDocs(q)
 querySnapshot.forEach((doc) => {
   // doc.data() is never undefined for query doc snapshots
   console.log(doc.id, ' => ', doc.data())
+  users.value.push(doc.data())
 })
+
+console.log(users)
 </script>
 
 <template>
