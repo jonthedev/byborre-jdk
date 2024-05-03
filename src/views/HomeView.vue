@@ -1,7 +1,32 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+import { useFirestore } from 'vuefire'
+import { collection, query, getDocs } from 'firebase/firestore'
+
+const users = ref([
+  { id: 1, fullName: 'John Doe', email: 'john@example.com' },
+  { id: 2, fullName: 'Jane Smith', email: 'jane@example.com' }
+])
+
+const db = useFirestore()
+const q = query(collection(db, 'users'))
+
+const querySnapshot = await getDocs(q)
+querySnapshot.forEach((doc) => {
+  // doc.data() is never undefined for query doc snapshots
+  console.log(doc.id, ' => ', doc.data())
+})
+</script>
 
 <template>
-  <main>
-    <h1 class="text-3xl font-bold underline">BYBORRE</h1>
-  </main>
+  <div>
+    <h2>List of Users</h2>
+    <ul v-if="users.length > 0">
+      <li v-for="user in users" :key="user.id">
+        <div>{{ user.fullName }}</div>
+        <div>{{ user.email }}</div>
+      </li>
+    </ul>
+    <div v-else>No users found.</div>
+  </div>
 </template>

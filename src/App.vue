@@ -1,9 +1,14 @@
 <script setup>
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
+
+const route = useRoute()
 </script>
 
 <template>
-  <RouterView />
+  <Suspense>
+    <RouterView :key="route.fullPath" />
+    <template #fallback> Loading.... </template>
+  </Suspense>
 </template>
 
 <style scoped></style>
