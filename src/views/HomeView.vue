@@ -14,8 +14,6 @@ querySnapshot.forEach((doc) => {
   console.log(doc.id, ' => ', doc.data())
   users.value.push(doc.data())
 })
-
-console.log(users)
 </script>
 
 <template>
