@@ -14,13 +14,17 @@
         <label for="password">Password</label>
         <input type="password" id="password" v-model="newUser.password" required />
       </div>
-      <button type="submit" @click.prevent="submitForm">Sign Up</button>
+      <button type="submit" @click.prevent="signUpNewUser">Sign Up</button>
     </form>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { collection, addDoc } from 'firebase/firestore'
+import { useFirestore } from 'vuefire'
+
+const db = useFirestore()
 
 const newUser = ref({
   fullName: '',
@@ -28,9 +32,12 @@ const newUser = ref({
   password: ''
 })
 
-function submitForm() {
-  console.log('Full Name:', newUser.value.fullName)
-  console.log('Email:', newUser.value.email)
-  console.log('Password:', newUser.value.password)
+async function signUpNewUser() {
+  // Add a new document with a generated id.
+  const newDoc = await addDoc(collection(db, 'users'), {
+    ...newUser.value
+  })
+
+  console.log(newDoc)
 }
 </script>
