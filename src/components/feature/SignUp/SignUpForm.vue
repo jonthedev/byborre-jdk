@@ -21,10 +21,12 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { collection, addDoc } from 'firebase/firestore'
 import { useFirestore } from 'vuefire'
 
 const db = useFirestore()
+const router = useRouter()
 
 const newUser = ref({
   fullName: '',
@@ -38,6 +40,8 @@ async function signUpNewUser() {
     ...newUser.value
   })
 
-  console.log(newDoc)
+  if (newDoc.id) {
+    router.push('/')
+  }
 }
 </script>
