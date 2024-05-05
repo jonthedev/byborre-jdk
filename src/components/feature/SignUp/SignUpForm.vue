@@ -36,7 +36,7 @@
         />
         <span class="signup-form__hint">minimum of 8 characters</span>
       </div>
-      <button type="submit" class="signup-form__button" @click.prevent="signUpNewUser">
+      <button type="submit" class="signup-form__button" @click.prevent="createUser">
         <span>Sign Up</span> <span class="signup-form__button--arrow">&#8594;</span>
       </button>
     </form>
@@ -46,11 +46,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { collection, addDoc } from 'firebase/firestore'
-import { useFirestore } from 'vuefire'
+import { useFirebaseAuth } from 'vuefire'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { updateProfile } from 'firebase/auth'
 
-const db = useFirestore()
 const router = useRouter()
+const auth = useFirebaseAuth()
 
 const newUser = ref({
   fullName: '',
@@ -58,17 +59,26 @@ const newUser = ref({
   password: ''
 })
 
-async function signUpNewUser() {
-  if (newUser.value.password.length < 8) {
-    return
-  }
-  // Add a new document with a generated id.
-  const newDoc = await addDoc(collection(db, 'users'), {
-    ...newUser.value
-  })
+async function createUser() {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      newUser.value.email,
+      newUser.value.password
+    )
+    const user = userCredential.user
 
-  if (newDoc.id) {
+    await updateProfile(user, {
+      displayName: newUser.value.fullName
+    })
+
+    newUser.value.fullName = ''
+    newUser.value.email = ''
+    newUser.value.password = ''
+
     router.push('/')
+  } catch (error) {
+    console.error('Error signing up:', error.message)
   }
 }
 </script>

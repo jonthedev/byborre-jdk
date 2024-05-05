@@ -1,11 +1,3 @@
-<script setup>
-import { useFirestore, useCollection } from 'vuefire'
-import { collection } from 'firebase/firestore'
-
-const db = useFirestore()
-const users = useCollection(collection(db, 'users'))
-</script>
-
 <template>
   <div class="bg-gray-100 flex justify-center items-center h-full relative">
     <p class="text-4xl font-bold">
