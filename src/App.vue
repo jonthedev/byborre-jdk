@@ -12,5 +12,3 @@ const route = useRoute()
     <template #fallback> Loading.... </template>
   </Suspense>
 </template>
-
-<style scoped></style>
