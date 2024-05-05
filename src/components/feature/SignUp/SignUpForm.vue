@@ -35,6 +35,7 @@
           minlength="8"
         />
         <span class="signup-form__hint">minimum of 8 characters</span>
+        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
       </div>
       <button type="submit" class="signup-form__button" @click.prevent="createUser">
         <span>Sign Up</span> <span class="signup-form__button--arrow">&#8594;</span>
@@ -59,7 +60,13 @@ const newUser = ref({
   password: ''
 })
 
+const errorMessage = ref('')
+
 async function createUser() {
+  if (newUser.value.password.length < 8) {
+    errorMessage.value = 'Minimum password length needs to be 8'
+    return
+  }
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -79,6 +86,7 @@ async function createUser() {
     router.push('/')
   } catch (error) {
     console.error('Error signing up:', error.message)
+    errorMessage.value = error.message.replace('Firebase: ', '')
   }
 }
 </script>
@@ -117,5 +125,9 @@ async function createUser() {
 
 .signup-form__button--arrow {
   @apply ml-2;
+}
+
+.error-message {
+  @apply text-red-500;
 }
 </style>
