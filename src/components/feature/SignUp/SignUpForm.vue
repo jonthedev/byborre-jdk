@@ -59,6 +59,9 @@ const newUser = ref({
 })
 
 async function signUpNewUser() {
+  if (newUser.value.password.length < 8) {
+    return
+  }
   // Add a new document with a generated id.
   const newDoc = await addDoc(collection(db, 'users'), {
     ...newUser.value
@@ -71,62 +74,38 @@ async function signUpNewUser() {
 </script>
 <style scoped>
 .signup-form {
-  height: 600px;
-  width: 450px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 35px;
-
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-col h-[37.5rem] w-[28.125rem] bg-white rounded-2xl p-9;
 }
 
 .signup-form__title {
-  font-size: 35px;
-  font-weight: 300;
-  margin-bottom: 0.5rem;
+  @apply text-4xl font-light mb-4;
 }
 
 .signup-form__form {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  @apply flex flex-col flex-1;
 }
 
 .signup-form__field {
-  width: 100%;
-  margin-bottom: 1rem;
+  @apply w-full mb-4;
 }
 
 .signup-form__input {
-  border: #adabab solid 1px;
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
+  @apply w-full p-2.5 rounded-lg border-[#adabab] border-solid border-[1px];
 }
 
 .signup-form__field:last-of-type {
-  flex-grow: 1;
+  @apply grow;
 }
 
 .signup-form__hint {
-  margin-top: 0.5rem;
-  display: block;
-  color: #adabab;
+  @apply block text-[#adabab] mt-2;
 }
 
 .signup-form__button {
-  background: #000;
-  color: #fff;
-  border-radius: 50px;
-  padding: 1rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply text-white flex items-center justify-center p-4 rounded-[50px] bg-black;
 }
 
 .signup-form__button--arrow {
-  margin-left: 8px;
+  @apply ml-2;
 }
 </style>
